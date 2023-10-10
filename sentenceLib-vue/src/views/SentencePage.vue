@@ -116,7 +116,7 @@
             size="small"
             ghost
           >
-            编辑
+            修改
           </a-button>
           <a-divider type="vertical" />
           <a-popconfirm
@@ -184,7 +184,7 @@
               <a-select-option
                 :key="st.sentenceNameId"
                 v-for="st in sentenceNames"
-                :value="st.name"
+                :value="st.sentenceNameId"
               >
                 {{ st.name }}
               </a-select-option>
@@ -280,12 +280,12 @@ const columns = [
     key: "example",
     align: "center",
   },
-  {
+ /*  {
     title: "序列化表示",
     dataIndex: "serialization",
     key: "serialization",
     align: "center",
-  },
+  }, */
 
   {
     title: "句型状态",
@@ -390,14 +390,17 @@ export default {
       searchName:"",
       searchType: "编辑者",
       sentenceNames: [
-        { sentenceNameId: 1, name: "赋值型" },
-        { sentenceNameId: 2, name: "循环型" },
-        { sentenceNameId: 3, name: "监听型" },
-        { sentenceNameId: 4, name: "定时型" },
-        { sentenceNameId: 5, name: "条件型" },
-        { sentenceNameId: 6, name: "绑定型" },
-        { sentenceNameId: 7, name: "命令型" },
-        { sentenceNameId: 8, name: "计算型" },
+        { sentenceNameId: 0, name: "其他型" },
+        { sentenceNameId: 1, name: "命令型" },
+        { sentenceNameId: 2, name: "赋值型" },
+        { sentenceNameId: 3, name: "计算型" },
+        { sentenceNameId: 4, name: "授权型" },
+        { sentenceNameId: 5, name: "定时型" },
+        { sentenceNameId: 6, name: "延时型" },
+        { sentenceNameId: 7, name: "条件型" },
+        { sentenceNameId: 8, name: "监听型" },
+        { sentenceNameId: 9, name: "循环型" },
+        
       ],
       sentenceData: [],
       columns,
@@ -439,9 +442,9 @@ export default {
         },
         {
           onSuccess: (model, fModel, json) => {
-            console.log(json);
-
-            this.sentenceData = json.data.rows.sentence;
+            let arrTmp=[...json.data.rows.sentence];
+            this.sentenceIdToName(arrTmp);
+            this.sentenceData=arrTmp.sort((a,b)=>new Date(b.updateTime).getTime() - new Date(a.updateTime).getTime());  
           
           },
           onFail: (msg, json) => {
@@ -450,6 +453,33 @@ export default {
           
         }
       );
+    },
+    //将句型列表中的每一条句型的id转换为文字表示，方便用户理解
+    sentenceIdToName(arrTmp){
+      if(Array.isArray(arrTmp)){
+              arrTmp.forEach((item)=>{
+              if(item.name=="1"){
+               item.name="命令型"
+              }else if(item.name=="2"){
+                item.name="赋值型"
+              }else if(item.name=="3"){
+                 item.name="计算型"
+              }else if(item.name=="4"){
+                 item.name="授权型"
+              }else if(item.name=="5"){
+               item.name="定时型"
+              }else if(item.name=="6"){
+                 item.name="延时型"
+              }else if(item.name=="7"){
+                item.name="条件型"
+              }else if(item.name=="8"){
+                 item.name="监听型"
+              }else if(item.name=="9"){
+                item.name="循环型"
+              }
+            })
+            }
+
     },
      toHome() {
       this.$router.push({ name: "Home" });
@@ -632,8 +662,11 @@ export default {
         },
         {
           onSuccess: (model, fModel, json) => {
-            console.log(json);
-            this.sentenceData = json.data.rows.sentence;
+           // console.log(json);
+            let arrTmp=[...json.data.rows.sentence];
+            this.sentenceIdToName(arrTmp);
+            this.sentenceData=arrTmp.sort((a,b)=>new Date(b.updateTime).getTime() - new Date(a.updateTime).getTime());  
+
           },
           onFail: (msg, json) => {
             console.log(msg, json);
@@ -662,8 +695,10 @@ export default {
         },
         {
           onSuccess: (model, fModel, json) => {
-            console.log(json);
-            this.sentenceData = json.data.rows.sentence;
+            //console.log(json);
+            let arrTmp=[...json.data.rows.sentence];
+            this.sentenceIdToName(arrTmp);
+            this.sentenceData=arrTmp.sort((a,b)=>new Date(b.updateTime).getTime() - new Date(a.updateTime).getTime());  
           },
           onFail: (msg, json) => {
             console.log(msg, json);
