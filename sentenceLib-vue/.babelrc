@@ -1,0 +1,28 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "node": 3,
+          "browsers": ["ie >= 8", "chrome >= 62"]
+        }
+      }
+    ]
+  ],
+  "plugins": [
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "corejs": false,
+        "helpers": false,
+        "regenerator": true,
+        "useESModules": false
+      }
+    ],
+    ["import", 
+      { "libraryName": "ant-design-vue", "libraryDirectory": "es", "style": "css" }
+    ]
+  ],
+  "comments": false
+}
